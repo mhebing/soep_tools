@@ -1,0 +1,9 @@
+test,item_id,item_id_neu,question_number,question_number_extra,item_number,variable_name_data_set_original,value,pretest_value_label_en,pretest_value_label_dt
+pre_2009,5972,,4,1,,f0042,-1,No answer,Keine Angabe
+pre_2009,household_status,,5,,,f005,-1,No answer,Keine Angabe
+pre_2009,household_status,,5,,,f005,1,Main income provider,Der Haupteinkommensbezieher
+pre_2009,household_status,,5,,,f005,2,Partner/spouse of the main income provider,Der Partner / Ehepartner des Haupteinkommensbeziehers
+pre_2009,household_status,,5,,,f005,3,One of the two main income providers,Einer von zwei Haupteinkommensbeziehern
+pre_2009,household_status,,5,,,f005,4,Child of the main income provider,Das Kind des oder der Haupteinkommensbezieher
+pre_2009,household_status,,5,,,f005,5,Parent of the main income provider,Ein Elternteil des oder der Haupteinkommensbezieher
+pre_2009,household_status,,5,,,f005,6,Other,Sonstiges
