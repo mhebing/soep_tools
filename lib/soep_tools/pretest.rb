@@ -34,7 +34,7 @@ module SoepTools
     end
   
     ##
-    # Import structure csv.
+    # Import structure csv (export from xlsx).
     #
     def import_structure(filename)
       require 'csv'
@@ -44,7 +44,7 @@ module SoepTools
     end
   
     ##
-    #  Import values csv.
+    #  Import values csv (export from xlsx).
     #
     def import_values(filename)
       raise "Import the structure first" if @structure.empty?
@@ -102,25 +102,35 @@ module SoepTools
       end
     end
 
-     def self.run_all(filename)
-       require 'csv'
-       CSV.foreach(filename, headers: true) do |row|
-         row = row.to_hash
-         name = row["Testname"]
-         puts "[INFO] #{name}"
-         pretest_attrs = { study: "pretest",
-                           name:  name,
-                           label: row["Titel english"] }
-         pretest = new pretest_attrs
-         pretest.import_structure "#{name}/#{name}_structure.csv"
-         pretest.import_values "#{name}/#{name}_values.csv"
-         pretest.export_variables "variables/#{name}.csv"
-         pretest.export_questions "questions/#{name}.csv"
-         pretest.spss_syntax "spss/#{name}.sps"
-         pretest.json_export "json/#{name}.json"
-         pretest
-       end
-     end
+    ##
+    # Run all (imports, exports, ...)
+    #
+    # Attributes:
+    # [filename] Master CSV file, including all pretests.
+    #
+    # Obligatory columns:
+    # [Testname] Name (string itentifier) of the pretest (must equal the folder
+    #            and filenames).
+    #
+    def self.run_all(filename)
+      require 'csv'
+      CSV.foreach(filename, headers: true) do |row|
+        row = row.to_hash
+        name = row["Testname"]
+        puts "[INFO] #{name}"
+        pretest_attrs = { study: "pretest",
+                          name:  name,
+                          label: row["Titel english"] }
+        pretest = new pretest_attrs
+        pretest.import_structure "#{name}/#{name}_structure.csv"
+        pretest.import_values "#{name}/#{name}_values.csv"
+        pretest.export_variables "variables/#{name}.csv"
+        pretest.export_questions "questions/#{name}.csv"
+        pretest.spss_syntax "spss/#{name}.sps"
+        pretest.json_export "json/#{name}.json"
+        pretest
+      end
+    end
 
     private ###################################################################
   
