@@ -1,3 +1,6 @@
+require "csv"
+require "nokogiri"
+
 require "soep_tools/version"
 
 require "soep_tools/pretest"
