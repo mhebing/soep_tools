@@ -157,8 +157,7 @@ module SoepTools
                               row["topic_new_key"],
                    question_text: row["question_en"],
                    question_item_text: row["item_text_en"] }
-      variable[:label] = "#{variable[:question_text]} " +
-                         "#{variable[:question_item_text]}"
+      variable[:label] = "#{variable[:label_english]}"
       variable[:values] = {}
       @structure[key] = variable unless key.nil?
     end
