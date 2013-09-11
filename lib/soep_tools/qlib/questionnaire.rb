@@ -11,6 +11,8 @@ module SoepTools::QLIB
     # Name of the questionnaire
     attr_accessor :name
 
+    attr_accessor :study, :study_unit
+
     ##
     # Initialize QLIB::Questionnaire object.
     #
