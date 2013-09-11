@@ -134,7 +134,7 @@ module SoepTools::QLIB
           .xpath(".//FormText/Text").text
         @item.item_id = answer.xpath("@Precode").to_s
         @item.item_label = answer.xpath(".//Text").text
-        @item.concept = QLIB::Helper.concept_from_question_id(@item.id, @item.item_id)
+        @item.concept = SoepTools::QLIB::Helper.concept_from_question_id(@item.id, @item.item_id)
         @variables << @item
       end
     end
@@ -151,7 +151,7 @@ module SoepTools::QLIB
       @item.question_label =
         question
         .xpath(".//FormText/Text").text
-      @item.concept = QLIB::Helper.concept_from_question_id(@item.id, NIL)
+      @item.concept = SoepTools::QLIB::Helper.concept_from_question_id(@item.id, NIL)
       @variables << @item
     end
 

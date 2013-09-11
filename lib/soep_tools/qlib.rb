@@ -1,7 +1,7 @@
 
-require "qlib/questionnaire"
-require "qlib/item"
-require "qlib/helper"
+require "soep_tools/qlib/questionnaire"
+require "soep_tools/qlib/item"
+require "soep_tools/qlib/helper"
 
 ##
 # Preparing questionnaires in XML format from QLIB for the import in
