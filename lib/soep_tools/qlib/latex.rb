@@ -38,7 +38,10 @@ module SoepTools::QLIB
       "\\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}\n" +
       "\\author{#{l q.study}: #{l q.study_unit}}\n" +
       "\\title{#{l q.name}}\n" +
-      "\\begin{document}\n"
+      "\\begin{document}\n" +
+      "\\maketitle\n" +
+      "\\tableofcontents\n" +
+      "\\clearpage\n"
     end
     
     def render_footer
@@ -53,6 +56,7 @@ module SoepTools::QLIB
       string.gsub! /\\/, "XXX"
       string.gsub! /&quot;/, " "
       string.gsub! /&/, "\\&"
+      string.gsub! /_/, "\\_"
       string.gsub! /%/, "\\%"
       string.gsub! /<br>/, "\\\\\\\\"
       string
