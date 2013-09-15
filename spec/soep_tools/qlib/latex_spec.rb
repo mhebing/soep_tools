@@ -1,4 +1,5 @@
 
+require "./lib/soep_tools/helper/latex_helper.rb"
 require "./lib/soep_tools/qlib/latex.rb"
 
 describe SoepTools::QLIB::Latex do

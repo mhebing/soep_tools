@@ -1,7 +1,6 @@
 module SoepTools::QLIB
-
   class Latex
-
+    include SoepTools::Helper::LatexHelper
     attr_accessor :string
 
     def initialize q
@@ -50,16 +49,6 @@ module SoepTools::QLIB
 
     def to_s
       @string
-    end
-
-    def l string
-      string.gsub! /\\/, "XXX"
-      string.gsub! /&quot;/, " "
-      string.gsub! /&/, "\\&"
-      string.gsub! /_/, "\\_"
-      string.gsub! /%/, "\\%"
-      string.gsub! /<br>/, "\\\\\\\\"
-      string
     end
 
   end
