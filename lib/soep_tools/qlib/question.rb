@@ -21,7 +21,24 @@ module SoepTools::QLIB
     end
 
     def self.qlib_create xml
-      
+      question = new
+      question.id = xml.xpath(".//Name").text
+      question.name = xml.xpath(".//FormText/Title").text
+      question.type = xml.name
+      question.questionnaire = @name
+      question.question_id = get_question_id(@item.id)
+      question.question_label =
+        xml
+        .xpath(".//FormText/Text").text
+      @item.concept = SoepTools::QLIB::Helper.concept_from_question_id(@item.id, nil)
+      if    xml.name == "Multi" ||
+            xml.name == "Grid"
+        question.answers = extract_multi xml
+      elsif xml.name == "Single" ||
+            xml.name == "Open"
+        question.answers = extract_single xml
+      end
+      question
     end
 
   end

@@ -154,7 +154,7 @@ module SoepTools::QLIB
       @item.question_label =
         question
         .xpath(".//FormText/Text").text
-      @item.concept = SoepTools::QLIB::Helper.concept_from_question_id(@item.id, NIL)
+      @item.concept = SoepTools::QLIB::Helper.concept_from_question_id(@item.id, nil)
       @variables << @item
     end
 

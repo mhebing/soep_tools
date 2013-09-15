@@ -4,6 +4,9 @@ require "soep_tools/qlib/item"
 require "soep_tools/qlib/helper"
 require "soep_tools/qlib/latex"
 require "soep_tools/qlib/question"
+require "soep_tools/qlib/answer"
+require "soep_tools/qlib/scale"
+require "soep_tools/qlib/variable"
 
 ##
 # Preparing questionnaires in XML format from QLIB for the import in
