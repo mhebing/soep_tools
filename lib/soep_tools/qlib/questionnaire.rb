@@ -19,9 +19,9 @@ module SoepTools::QLIB
     #
     # Options:
     #
-    # * name: Name of the questionniare
-    # * study: Name of the study.
-    # * study_unit: Year or unit of the study.
+    # [:name] Name of the questionniare
+    # [:study] Name of the study.
+    # [:study_unit] Year or unit of the study.
     #
     def initialize(options = {})
       @variables = []
