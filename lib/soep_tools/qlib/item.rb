@@ -4,11 +4,17 @@ module SoepTools::QLIB
   # The class Item represents one item in the "Strukturtabelle".
   #
   class Item
-  
+
+    # Title in QLIB.  
     attr_accessor :name
+
+    # The type of a question is one of the following: Open, Single,
+    # Multi, or Grid.
     attr_accessor :type
     attr_accessor :study
     attr_accessor :study_unit
+
+    # Question name (number + varname)
     attr_accessor :id
     attr_accessor :concept
     attr_accessor :questionnaire
