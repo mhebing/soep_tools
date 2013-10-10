@@ -9,15 +9,18 @@ module SoepTools::QLIB
     include SoepTools::QLIB::Helper
 
     def initialize(opts = {})
-      answers = opts[:answers] || []
-      scales = opts[:scales] || []
-      id, number, name, concept, researcher_note = opts[:id], opts[:number],
-        opts[:name], opts[:concept], opts[:researcher_note]
+      @answers = opts[:answers] || []
+      @scales = opts[:scales] || []
+      @id, @number, @name, @concept, @researcher_note =
+        opts[:id], opts[:number], opts[:name], opts[:concept], opts[:researcher_note]
     end
 
-    def self.create_from_xml xml
+    def self.create_from_xml(xml)
       if xml.name == "Multi"
         question = SoepTools::QLIB::MultiQuestion.new
+        xml.xpath(".//Answers/Answer").each do |answer|
+          question.answers << SoepTools::QLIB::Answer.create_from_xml(answer)
+        end
       else
         question = new
       end
@@ -31,8 +34,9 @@ module SoepTools::QLIB
     end
 
     def to_latex
-      s  = "\\section{Question #{l number}}" +
-           "\\textbf{#{l text}}"
+      s  = "\n" +
+           "\\section{Question #{l number}}\n" +
+           "\\textbf{#{l text}}\n"
       s
     end
 
