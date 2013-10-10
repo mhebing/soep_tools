@@ -2,16 +2,11 @@ module SoepTools::QLIB
 
   class Question
 
-    attr_accessor :id
-    attr_accessor :number
-    attr_accessor :name
-    attr_accessor :concept
-    attr_accessor :text
-    attr_accessor :answers
-    attr_accessor :scales
-    attr_accessor :researcher_note
+    attr_accessor :id, :number, :name, :concept, :text,
+                  :answers, :scales, :researcher_note, :type
 
     include SoepTools::Helper::LatexHelper
+    include SoepTools::QLIB::Helper
 
     def initialize(opts = {})
       answers = opts[:answers] || []
@@ -20,24 +15,14 @@ module SoepTools::QLIB
         opts[:name], opts[:concept], opts[:researcher_note]
     end
 
-    def self.qlib_create xml
+    def self.create_from_xml xml
       question = new
       question.id = xml.xpath(".//Name").text
       question.name = xml.xpath(".//FormText/Title").text
       question.type = xml.name
-      question.questionnaire = @name
-      question.question_id = get_question_id(@item.id)
-      question.question_label =
-        xml
-        .xpath(".//FormText/Text").text
-      @item.concept = SoepTools::QLIB::Helper.concept_from_question_id(@item.id, nil)
-      if    xml.name == "Multi" ||
-            xml.name == "Grid"
-        question.answers = extract_multi xml
-      elsif xml.name == "Single" ||
-            xml.name == "Open"
-        question.answers = extract_single xml
-      end
+      question.number = SoepTools::QLIB::Helper.number_from_question_id(question.id)
+      question.text = xml.xpath(".//FormText/Text").text
+      question.concept = SoepTools::QLIB::Helper.concept_from_question_id(question.id, nil)
       question
     end
 

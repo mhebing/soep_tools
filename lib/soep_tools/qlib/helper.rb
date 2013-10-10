@@ -26,6 +26,15 @@ module SoepTools::QLIB
       end
       fix
     end
+
+    def self.number_from_question_id(id)
+      return id.match(/Q([0-9]*)/)[1]
+    end
+
+    def self.question_types
+      "//Single | //Multi | //Open | //Grid"
+    end
+
   end
 end
 
