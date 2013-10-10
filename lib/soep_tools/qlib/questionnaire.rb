@@ -5,8 +5,8 @@ module SoepTools::QLIB
   #
   class Questionnaire
 
-    # Array, representing the variables table
-    attr_accessor :variables
+    # Hash with question-number as key.
+    attr_accessor :questions
 
     # Name of the questionnaire
     attr_accessor :name
@@ -24,7 +24,7 @@ module SoepTools::QLIB
     # [:study_unit] Year or unit of the study.
     #
     def initialize(options = {})
-      @variables = []
+      @questions = {}
       @name = options[:name] || "no name"
       @study = options[:study] ||= "study"
       @study_unit = options[:study_unit] ||= "study_unit"
@@ -46,67 +46,6 @@ module SoepTools::QLIB
       end
     end
 
-    ##
-    # Export @variables to a CSV file in the format of our
-    # SOEP "Strukturtabelle".
-    #
-    def export_csv(filename)
-      CSV.open(filename, "wb") do |csv|
-        csv << Item.description
-        @variables.each do |item|
-          csv << item.row
-        end
-      end
-    end
-
-    ##
-    # Attach information from the old "Strukturtabelle".
-    #
-    def attach_structure(filename)
-      require 'csv'
-      @old_variables = {}
-      CSV.foreach(filename = filename, headers: true) do |row|
-        row = row.to_hash
-        @old_variables[row['var_fix'].downcase] = row unless row['var_fix'].nil?
-      end
-      @variables.each do |item|
-        if @old_variables[item.concept].nil?
-          item.is_new = '?'
-        else
-          item.pe_inhh =
-            @old_variables[item.concept]['pe_inhh'] unless
-            item.concept.nil?
-          item.old_study_unit =
-            @old_variables[item.concept]['year'] unless
-            item.concept.nil?
-        end
-      end
-    end
-
-    ##
-    # Encrich standard variables table.
-    #
-    # [infile] filename of a variables table in CSV format
-    # [outfile] filename for the enriched version of the variables table.
-    # 
-    # *TODO:* Implement !!!
-    #
-    def enrich_variables(infile, outfile)
-      require 'csv'
-      @vars_import = []
-
-      CSV.foreach(infile, headers: true) do |row|
-        @vars_import << row.to_hash
-      end
-
-      # TODO...
-
-      CSV.open(outfile, "wb") do |csv|
-        @vars_import.each do |var|
-          csv << var.row
-        end
-      end
-    end
 
     private ####################################################################
 
@@ -124,38 +63,38 @@ module SoepTools::QLIB
 
     def extract_multi(question)
       question.xpath(".//Answers/Answer").each do |answer|
-        @item = Item.new
-        @item.study = @study
-        @item.study_unit = @study_unit
-        @item.id = question.xpath(".//Name").text
-        @item.name = question.xpath(".//FormText/Title").text
-        @item.type = question.name
-        @item.questionnaire = @name
-        @item.question_id = get_question_id(@item.id)
-        @item.question_label =
+        @question = Question.new
+        @question.study = @study
+        @question.study_unit = @study_unit
+        @question.id = question.xpath(".//Name").text
+        @question.name = question.xpath(".//FormText/Title").text
+        @question.type = question.name
+        @question.questionnaire = @name
+        @question.question_id = get_question_id(@question.id)
+        @question.question_label =
           question
           .xpath(".//FormText/Text").text
-        @item.item_id = answer.xpath("@Precode").to_s
-        @item.item_label = answer.xpath(".//Text").text
-        @item.concept = SoepTools::QLIB::Helper.concept_from_question_id(@item.id, @item.item_id)
-        @variables << @item
+        @question.item_id = answer.xpath("@Precode").to_s
+        @question.item_label = answer.xpath(".//Text").text
+        @question.concept = SoepTools::QLIB::Helper.concept_from_question_id(@question.id, @question.item_id)
+        @questions << @question
       end
     end
 
     def extract_single(question)
-      @item = Item.new
-      @item.study = @study
-      @item.study_unit = @study_unit
-      @item.id =  question.xpath(".//Name").text
-      @item.name = question.xpath(".//FormText/Title").text
-      @item.type = question.name
-      @item.questionnaire = @name
-      @item.question_id = get_question_id(@item.id)
-      @item.question_label =
+      @question = Question.new
+      @question.study = @study
+      @question.study_unit = @study_unit
+      @question.id =  question.xpath(".//Name").text
+      @question.name = question.xpath(".//FormText/Title").text
+      @question.type = question.name
+      @question.questionnaire = @name
+      @question.question_id = get_question_id(@question.id)
+      @question.question_label =
         question
         .xpath(".//FormText/Text").text
-      @item.concept = SoepTools::QLIB::Helper.concept_from_question_id(@item.id, nil)
-      @variables << @item
+      @question.concept = SoepTools::QLIB::Helper.concept_from_question_id(@question.id, nil)
+      @questions << @question
     end
 
     def get_question_id(id)
