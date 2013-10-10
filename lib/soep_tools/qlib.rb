@@ -19,5 +19,3 @@ require "soep_tools/qlib/answer"
 require "soep_tools/qlib/scale"
 require "soep_tools/qlib/variable"
 
-require "soep_tools/qlib/latex"
-
