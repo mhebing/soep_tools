@@ -26,6 +26,12 @@ module SoepTools::QLIB
       question
     end
 
+    def to_latex
+      s  = "\\section{Question #{l number}}" +
+           "\\textbf{#{l text}}"
+      s
+    end
+
   end
 
 end

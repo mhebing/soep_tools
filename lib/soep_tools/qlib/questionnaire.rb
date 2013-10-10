@@ -1,3 +1,4 @@
+
 module SoepTools::QLIB
 
   class Questionnaire
@@ -5,7 +6,6 @@ module SoepTools::QLIB
     attr_accessor :questions, :name
 
     include SoepTools::Helper::LatexHelper
-    include SoepTools::QLIB::Helper
 
     def initialize(options = {})
       @questions = {}
@@ -25,6 +25,18 @@ module SoepTools::QLIB
       puts "TODO: import Notes"
     end
 
+    def write_latex(filename, opts = {})
+      puts to_latex(opts)
+    end
+
+    def to_latex(opts = {})
+      s = render_latex_header name: name
+      @questions.each do |number, question|
+        s += question.to_latex
+      end
+      s += render_latex_footer
+    end
+
     private ####################################################################
 
     def read_xml(filename)
@@ -36,3 +48,4 @@ module SoepTools::QLIB
 
   end
 end
+
