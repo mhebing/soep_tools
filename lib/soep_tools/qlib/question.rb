@@ -16,7 +16,11 @@ module SoepTools::QLIB
     end
 
     def self.create_from_xml xml
-      question = new
+      if xml.name == "Multi"
+        question = SoepTools::QLIB::MultiQuestion.new
+      else
+        question = new
+      end
       question.id = xml.xpath(".//Name").text
       question.name = xml.xpath(".//FormText/Title").text
       question.type = xml.name

@@ -15,6 +15,7 @@ require "soep_tools/qlib/item"
 
 require "soep_tools/qlib/questionnaire"
 require "soep_tools/qlib/question"
+require "soep_tools/qlib/multi_question"
 require "soep_tools/qlib/answer"
 require "soep_tools/qlib/scale"
 require "soep_tools/qlib/variable"
