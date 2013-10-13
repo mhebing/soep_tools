@@ -42,6 +42,7 @@ require "soep_tools/qlib/helper"
 require "soep_tools/qlib/item_list"
 require "soep_tools/qlib/item"
 
+require "soep_tools/qlib/researcher_notes"
 require "soep_tools/qlib/questionnaire"
 require "soep_tools/qlib/question"
 require "soep_tools/qlib/multi_question"
