@@ -5,6 +5,8 @@ module SoepTools::QLIB
 
     attr_accessor :notes
 
+    include SoepTools::Helper::LatexHelper
+
     def initialize
       @notes = {}
     end
