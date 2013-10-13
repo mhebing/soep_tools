@@ -6,12 +6,13 @@ module SoepTools::Helper
   module LatexHelper
 
     def l string
-      string.gsub! /\\/, "XXX"
-      string.gsub! /&quot;/, " "
-      string.gsub! /&/, "\\&"
-      string.gsub! /_/, "\\_"
-      string.gsub! /%/, "\\%"
-      string.gsub! /<br>/, "\\\\\\\\"
+      string = string.to_s
+      string = string.gsub /\\/, "XXX"
+      string = string.gsub /&quot;/, " "
+      string = string.gsub /&/, "\\&"
+      string = string.gsub /_/, "\\_"
+      string = string.gsub /%/, "\\%"
+      string = string.gsub /<br>/, "\\\\\\\\"
       string
     end
 

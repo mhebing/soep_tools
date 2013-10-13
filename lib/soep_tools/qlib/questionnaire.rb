@@ -94,7 +94,7 @@ module SoepTools::QLIB
         name = question.xpath("./Name").text.match(/^Q([0-9]*)/)[1]
         if new[name]
           if new[name]["researcher"]
-            question.add_child "<researcherNote>#{new[name]["researcher"]}</researcherNote>"
+            question.add_child "<ResearcherNote>#{new[name]["researcher"]}</ResearcherNote>"
           end
         end
       end
