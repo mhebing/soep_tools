@@ -13,7 +13,7 @@ module SoepTools::QLIB
     end
 
     def import_xml(filename)
-      xml = read_xml filename
+      xml = self.class.read_xml filename
       xml.xpath(SoepTools::QLIB::Helper.question_types).each do |question|
         number = SoepTools::QLIB::Helper.number_from_question_id question.xpath(".//Name").text
         question = SoepTools::QLIB::Question.create_from_xml question
@@ -37,13 +37,79 @@ module SoepTools::QLIB
       s += render_latex_footer
     end
 
+    def self.enrich_xml(xml_filename, csv_filename, output_filename = nil)
+      xml = read_xml xml_filename
+      csv = parse_csv csv_filename
+      out = output_filename || xml_filename
+      xml = add_notes_to_xml xml, csv
+      write xml, out
+    end
+
     private ####################################################################
 
-    def read_xml(filename)
+    def self.read_xml(filename)
       file = File.open filename
       xml = Nokogiri::XML file
       file.close
       xml
+    end
+
+    def self.parse_csv(filename)
+      var = nil
+      type = nil
+      notes = {}
+      CSV.foreach(filename, headers: true) do |row|
+        row = row.to_hash
+        next if row["Notes"].nil?
+        puts row
+        n = row["Notes"]
+        var = row["#"] unless row["#"].nil?
+        notes[var] ||= {}
+        if /^Client notes:/.match n
+          type = "client"
+          first = true
+        elsif /^Researcher notes:/.match n
+          type = "researcher"
+          first = true
+        elsif /^Scripter notes/.match n
+          type = "scripter"
+          first = true
+        elsif /^Data processor notes:/.match n
+          type = "data"
+          first = true
+        else
+          first = false
+        end
+          notes[var][type] ||= ""
+          notes[var][type] += first ? n.gsub(/^[a-zA-z ]+\: (.*)$/, "\\1") : "\n#{n}"
+          puts n
+      end
+      notes
+    end
+
+    def self.add_notes_to_xml(xml, csv)
+      new = {}
+      csv.map do |var, notes|
+        new[var.match(/^Q([0-9]*)/)[1]] = notes
+      end
+      xml.xpath("//Single | //Multi | //Open | //Grid").each do |question|
+        name = question.xpath("./Name").text.match(/^Q([0-9]*)/)[1]
+        if new[name]
+          if new[name]["researcher"]
+            puts name
+            puts new[name]["researcher"]
+            question.add_child "<researcherNote>#{new[name]["researcher"]}</researcherNote>"
+            puts question
+          end
+        end
+      end
+      xml
+    end
+
+    def self.write text, filename
+      File.open filename, "w" do |file|
+        file.write text
+      end
     end
 
   end
