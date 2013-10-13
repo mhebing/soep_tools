@@ -30,6 +30,7 @@ module SoepTools::QLIB
       question.number = SoepTools::QLIB::Helper.number_from_question_id(question.id)
       question.text = xml.xpath(".//FormText/Text").text
       question.concept = SoepTools::QLIB::Helper.concept_from_question_id(question.id, nil)
+      question.researcher_note = parse_researcher_note xml.xpath(".//ResearcherNote").text
       question
     end
 
@@ -38,6 +39,12 @@ module SoepTools::QLIB
            "\\section{Question #{l number}}\n" +
            "\\textbf{#{l text}}\n"
       s
+    end
+
+    private ##################################################################
+
+    def self.parse_researcher_note note
+      note
     end
 
   end
