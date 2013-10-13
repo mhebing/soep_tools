@@ -26,7 +26,7 @@ module SoepTools::QLIB
     end
 
     def write_latex(filename, opts = {})
-      puts to_latex(opts)
+      write_file to_latex(opts), filename
     end
 
     def to_latex(opts = {})
@@ -42,7 +42,7 @@ module SoepTools::QLIB
       csv = parse_csv csv_filename
       out = output_filename || xml_filename
       xml = add_notes_to_xml xml, csv
-      write xml, out
+      write_file xml, out
     end
 
     private ####################################################################
@@ -61,7 +61,6 @@ module SoepTools::QLIB
       CSV.foreach(filename, headers: true) do |row|
         row = row.to_hash
         next if row["Notes"].nil?
-        puts row
         n = row["Notes"]
         var = row["#"] unless row["#"].nil?
         notes[var] ||= {}
@@ -82,7 +81,6 @@ module SoepTools::QLIB
         end
           notes[var][type] ||= ""
           notes[var][type] += first ? n.gsub(/^[a-zA-z ]+\: (.*)$/, "\\1") : "\n#{n}"
-          puts n
       end
       notes
     end
@@ -96,17 +94,14 @@ module SoepTools::QLIB
         name = question.xpath("./Name").text.match(/^Q([0-9]*)/)[1]
         if new[name]
           if new[name]["researcher"]
-            puts name
-            puts new[name]["researcher"]
             question.add_child "<researcherNote>#{new[name]["researcher"]}</researcherNote>"
-            puts question
           end
         end
       end
       xml
     end
 
-    def self.write text, filename
+    def self.write_file text, filename
       File.open filename, "w" do |file|
         file.write text
       end
