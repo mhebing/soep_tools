@@ -13,7 +13,7 @@ module SoepTools::QLIB
       @scales = []
     end
 
-    def self.create_from_xml(xml)
+    def self.create_from_xml xml
       if xml.name == "Multi"
         question = SoepTools::QLIB::MultiQuestion.new
       else
@@ -29,6 +29,10 @@ module SoepTools::QLIB
       else
         full_latex
       end
+    end
+
+    def set_attributes_from_xml xml
+      parse_xml_attributes xml
     end
 
     private ##################################################################
@@ -62,20 +66,20 @@ module SoepTools::QLIB
       s
     end
 
-    def set_attributes_from_xml xml
+    def parse_xml_attributes xml
       xml.xpath(".//Answers/Answer").each do |answer|
-        answers << SoepTools::QLIB::Answer.create_from_xml(answer)
+        @answers << SoepTools::QLIB::Answer.create_from_xml(answer)
       end
       xml.xpath(".//Scales/Scale").each do |answer|
-        scales << SoepTools::QLIB::Scale.create_from_xml(answer)
+        @scales << SoepTools::QLIB::Scale.create_from_xml(answer)
       end
-      id = xml.xpath(".//Name").text
-      name = xml.xpath(".//FormText/Title").text
-      type = xml.name
-      number = SoepTools::QLIB::Helper.number_from_question_id(id)
-      text = xml.xpath(".//FormText/Text").text
-      concept = SoepTools::QLIB::Helper.concept_from_question_id(id, nil)
-      researcher_notes = SoepTools::QLIB::ResearcherNotes.create_from_xml xml.xpath(".//ResearcherNote").text
+      @id = xml.xpath(".//Name").text
+      @name = xml.xpath(".//FormText/Title").text
+      @type = xml.name
+      @number = SoepTools::QLIB::Helper.number_from_question_id(@id)
+      @text = xml.xpath(".//FormText/Text").text
+      @concept = SoepTools::QLIB::Helper.concept_from_question_id(@id, nil)
+      @researcher_notes = SoepTools::QLIB::ResearcherNotes.create_from_xml xml.xpath(".//ResearcherNote").text
     end
 
   end

@@ -11,7 +11,7 @@ module SoepTools::QLIB
 
     def self.create_from_xml xml
       researcher_note = new
-      researcher_note.set_attributes_from_xml
+      researcher_note.set_attributes_from_xml xml
       researcher_note
     end
 
@@ -31,9 +31,13 @@ module SoepTools::QLIB
       s
     end
 
+    def set_attributes_from_xml xml
+      parse_xml_attributes xml
+    end
+
     private ##################################################################
 
-    def set_attributes_from_xml xml
+    def parse_xml_attributes xml
       xml.each_line do |input_line|
         line = input_line.split(" ")
         key = line[0]
