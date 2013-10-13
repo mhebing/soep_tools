@@ -26,7 +26,7 @@ module SoepTools::QLIB
     end
 
     def write_latex(filename, opts = {})
-      write_file to_latex(opts), filename
+      self.class.write_file to_latex(opts), filename
     end
 
     def to_latex(opts = {})
@@ -79,8 +79,8 @@ module SoepTools::QLIB
         else
           first = false
         end
-          notes[var][type] ||= ""
-          notes[var][type] += first ? n.gsub(/^[a-zA-z ]+\: (.*)$/, "\\1") : "\n#{n}"
+        notes[var][type] ||= ""
+        notes[var][type] += first ? n.gsub(/^[a-zA-z ]+\: (.*)$/, "\\1") : "\n#{n}"
       end
       notes
     end
