@@ -112,7 +112,7 @@ module SoepTools
     # [Testname] Name (string itentifier) of the pretest (must equal the folder
     #            and filenames).
     #
-    def self.run_all(filename)
+    def self.run_all(filename, recode = true)
       require 'csv'
       CSV.foreach(filename, headers: true) do |row|
         row = row.to_hash
@@ -123,12 +123,17 @@ module SoepTools
                           name:  name,
                           label: row["Titel english"] }
         pretest = new pretest_attrs
-        ["item", "value"].each do |x|
-          system "cp #{name}/#{name}_#{x}.csv #{name}/#{name}_#{x}_utf8.csv"
-          system "recode l1..utf8 #{name}/#{name}_#{x}_utf8.csv"
+        if recode
+          ["item", "value"].each do |x|
+            system "cp #{name}/#{name}_#{x}.csv #{name}/#{name}_#{x}_utf8.csv"
+            system "recode l1..utf8 #{name}/#{name}_#{x}_utf8.csv"
+          end
+          pretest.import_structure "#{name}/#{name}_item_utf8.csv"
+          pretest.import_values "#{name}/#{name}_value_utf8.csv"
+        else
+          pretest.import_structure "#{name}/#{name}_item.csv"
+          pretest.import_values "#{name}/#{name}_value.csv"
         end
-        pretest.import_structure "#{name}/#{name}_item_utf8.csv"
-        pretest.import_values "#{name}/#{name}_value_utf8.csv"
         pretest.export_variables "variables/#{name}.csv"
         pretest.export_questions "questions/#{name}.csv"
         pretest.spss_syntax "spss/#{name}.sps"
