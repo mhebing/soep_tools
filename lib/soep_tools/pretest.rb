@@ -36,9 +36,10 @@ module SoepTools
     ##
     # Import structure csv (export from xlsx).
     #
-    def import_structure(filename)
+    def import_structure(filename, opts={})
+      opts[:col_sep] ||= ";"
       require 'csv'
-      CSV.foreach(filename, headers: true, col_sep: ";") do |row|
+      CSV.foreach(filename, headers: true, col_sep: opts[:col_sep]) do |row|
         import_structure_row row
       end
     end
@@ -46,10 +47,11 @@ module SoepTools
     ##
     #  Import values csv (export from xlsx).
     #
-    def import_values(filename)
+    def import_values(filename, opts={})
       raise "Import the structure first" if @structure.empty?
+      opts[:col_sep] ||= ";"
       require 'csv'
-      CSV.foreach(filename, headers: true, col_sep: ";") do |row|
+      CSV.foreach(filename, headers: true, col_sep: opts[:col_sep]) do |row|
         import_value_row row
       end
     end
